@@ -227,7 +227,7 @@ class Channel(Config):
                     "x-lct" : self.channel_access_token,
         }
 
-        r = requests.get(self.LINE_HOST_DOMAIN "/mh/api/v39/post/list.json?homeId=" + mid + "&commentLimit=2&sourceType=LINE_PROFILE_COVER&likeLimit=6",
+        r = requests.get(self.LINE_HOST_DOMAIN + "/mh/api/v39/post/list.json?homeId=" + mid + "&commentLimit=2&sourceType=LINE_PROFILE_COVER&likeLimit=6",
         headers = header
         )
         return r.json()
