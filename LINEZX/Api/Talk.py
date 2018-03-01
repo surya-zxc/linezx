@@ -63,9 +63,6 @@ class Talk(Config):
     self.transport.open()
     self.protocol = TCompactProtocol.TCompactProtocol(self.transport);
     self.client = TalkService.Client(self.protocol)
-
-  #def login(self, mail, passwd, cert=None, callback=None):
-  #  tanys.Login(sid=mail,password=passwd,callback=callback,uke=self.ready)
     
   def ready(self,moji):
     r = moji.split(",")
