@@ -60,6 +60,9 @@ class LINE:
 
   def getUserTicket(self):
     return self.Talk.client.getUserTicket()
+  
+  def reissueUserTicket(self, expirationTime, maxUseCount):
+    return self.Talk.client.reissueUserTicket(expirationTime, maxUseCount)
 
   def updateProfile(self, profileObject):
     return self.Talk.client.updateProfile(0, profileObject)
@@ -67,6 +70,22 @@ class LINE:
   def updateSettings(self, settingObject):
     return self.Talk.client.updateSettings(0, settingObject)
 
+
+  """Announcements"""
+  def getChatRoomAnnouncementsBulk(self, chatRoomMids):
+    return self.Talk.client.getChatRoomAnnouncementsBulk(chatRoomMids)
+
+  def getChatRoomAnnouncements(self, chatRoomMids):
+    return self.Talk.client.getChatRoomAnnouncements(chatRoomMids)
+
+  def createChatRoomAnnouncement(self, chatRoomMid, _type, contents):
+    return self.Talk.client.createChatRoomAnnouncement(0, chatRoomMid, _type, contents)
+
+  def removeChatRoomAnnouncement(self, chatRoomMid, announcementSeq):
+    return self.Talk.client.createChatRoomAnnouncement(0, chatRoomMid, announcementSeq)
+  
+  def getLastAnnouncementIndex(self):
+    return self.Talk.client.getLastAnnouncementIndex()
 
   """Operation"""
 
@@ -83,6 +102,9 @@ class LINE:
         return self.Poll.stream()
 
   """Message"""
+
+  def unsendMessage(self, messageId):
+        return self.Talk.client.unsendMessage(0,messageId)
 
   def sendMessage(self, messageObject):
         return self.Talk.client.sendMessage(0,messageObject)
@@ -207,11 +229,17 @@ class LINE:
   def createGroup(self, name, midlist):
         return self.Talk.client.createGroup(0, name, midlist)
 
+  def getGroupWithoutMembers(self, groupId):
+        return self.Talk.client.getGroupWithoutMembers(groupId)
+
   def getGroup(self, groupId):
         return self.Talk.client.getGroup(groupId)
 
   def getGroups(self, groupIds):
         return self.Talk.client.getGroups(groupIds)
+ 
+  def getGroupsV2(self, groupIds):
+        return self.Talk.client.getGroupsV2(groupIds)
 
   def getGroupIdsInvited(self):
         return self.Talk.client.getGroupIdsInvited()
