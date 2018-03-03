@@ -11,6 +11,7 @@ Require to install:
 > python2.7<br />
 > pip<br />
 > rsa<br />
+> tcr<br />
 > requests<br />
 > thrift==0.9.3<br />
 
