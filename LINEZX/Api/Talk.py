@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-import os, sys
-path = os.path.join(os.path.dirname(__file__), '../lib/')
-sys.path.append(path)
 import json, requests, rsa
 
 from thrift.transport import THttpClient
 from thrift.protocol import TCompactProtocol
 from .config import Config
-from Gen import TalkService
-from Gen import AuthService
-from Gen.ttypes import *
+from tcr import TalkService
+from tcr import AuthService
+from tcr.ttypes import *
 con = Config()
 _session = requests.session()
 

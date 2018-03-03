@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from Gen.ttypes import ApplicationType
+from tcr.ttypes import ApplicationType
 import re
 
 class Config():

@@ -1,14 +1,9 @@
-import os, sys, time
-path = os.path.join(os.path.dirname(__file__), '../lib/')
-sys.path.insert(0, path)
-
+# -*- coding: utf-8 -*-
 from thrift.transport import THttpClient
 from thrift.protocol import TCompactProtocol
 from .config import Config
-from Gen import TalkService
-from Gen.ttypes import *
-#import ssl
-#ssl._create_default_https_context = ssl._create_unverified_context
+from tcr import TalkService
+from tcr.ttypes import *
 
 class Poll(Config):
 
@@ -28,7 +23,7 @@ class Poll(Config):
     self.transport.open()
 
   def stream(self):
-    #usleep = lambda x: time.sleep(x/1000000.0)
+    
     while True:
       try:
         Ops = self.client.fetchOps(self.rev, 50, 0, 0)
@@ -36,9 +31,6 @@ class Poll(Config):
         raise Exception("It might be wrong revision\n" + str(self.rev))
 
       for Op in Ops:
-          # print Op.type
         if (Op.type != OpType.END_OF_OPERATION):
           self.rev = max(self.rev, Op.revision)
           return Op
-
-      #usleep(sleep)

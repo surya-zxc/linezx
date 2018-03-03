@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import LINEZX
-from LINEZX.lib.Gen.ttypes import *
+from tcr.ttypes import *
 from datetime import datetime
 import time, random, sys, json, codecs, threading, glob, re, string, os, requests, subprocess, six, ast
 

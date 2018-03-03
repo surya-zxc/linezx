@@ -14,6 +14,10 @@ Require to install:
 > requests<br />
 > thrift==0.9.3<br />
 
+How to install:
+```
+python setup.py install
+```
 How to use:
 ```
 python example.py
