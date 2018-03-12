@@ -8,7 +8,7 @@ and others<br />
 
 Require to install:
 
-> python2.7<br />
+> [python2.7](https://www.python.org/downloads/release/python-2713/)<br />
 > pip<br />
 > rsa<br />
 > tcr<br />
@@ -23,3 +23,6 @@ How to use:
 ```
 python example.py
 ```
+
+<br />
+[@surya_zxc](https://www.instagram.com/surya_zxc)

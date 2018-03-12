@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .Api import Poll, Talk, channel
+from .Api import Poll, Talk, channel, call
 from tcr.ttypes import *
 
 def def_callback(str):
@@ -48,6 +48,8 @@ class LINE:
     self.token = self.channel.token
     self.obs_token = self.channel.obs_token
     self.refresh_token = self.channel.refresh_token
+
+    self.call = call.Call(self.authToken)
 
 
   """User"""
@@ -109,12 +111,33 @@ class LINE:
   def sendMessage(self, messageObject):
         return self.Talk.client.sendMessage(0,messageObject)
 
+  def sendSticker(self, Tomid, packageId, stickerId):
+        msg = Message()
+        msg.contentMetadata = {
+            'STKVER': '100',
+            'STKPKGID': packageId,
+            'STKID': stickerId
+        }
+        msg.contentType = 7
+        msg.to = Tomid
+        msg.text = ''
+        return self.Talk.client.sendMessage(0, msg)
+
+  def sendContact(self, Tomid, mid):
+        msg = Message()
+        msg.contentMetadata = {'mid': mid}
+        msg.to = Tomid
+        msg.text = ''
+        msg.contentType = 13
+        return self.Talk.client.sendMessage(0, msg)
+
   def sendText(self, Tomid, text):
         msg = Message()
         msg.to = Tomid
         msg.text = text
 
         return self.Talk.client.sendMessage(0, msg)
+
   def sendImage(self, to_, path):
         M = Message(to=to_,contentType = 1)
         M.contentMetadata = None
@@ -319,6 +342,19 @@ class LINE:
   def createAlbum2(self, gid, name, path):
       return self.channel.createAlbum(gid, name, path, oid)
 
+  """Callservice"""
+
+  def acquireCallRoute(self,to):
+        return self.call.acquireCallRoute(to)
+
+  def acquireGroupCallRoute(self, groupId, mediaType=MediaType.AUDIO):
+        return self.call.acquireGroupCallRoute(groupId, mediaType)
+
+  def getGroupCall(self, ChatMid):
+        return self.call.getGroupCall(ChatMid)
+
+  def inviteIntoGroupCall(self, chatId, contactIds=[], mediaType=MediaType.AUDIO):
+        return self.call.inviteIntoGroupCall(chatId, contactIds, mediaType)
 
   def __validate(self, mail, passwd, cert, token, qr, www):
     if mail is not None and passwd is not None and cert is None:
