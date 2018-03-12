@@ -24,5 +24,5 @@ How to use:
 python example.py
 ```
 
-<br />
-[@surya_zxc](https://www.instagram.com/surya_zxc)
+
+[surya_zxc](https://www.instagram.com/surya_zxc/)<br />
