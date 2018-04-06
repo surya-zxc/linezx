@@ -73,8 +73,10 @@ class Talk(Config):
     self.transport.path = self.LINE_API_QUERY_PATH_FIR
 
   def TokenLogin(self, authToken):
-    self.transport.setCustomHeaders({"X-Line-Application" : self.APP_NAME,"User-Agent" : self.APP_NAME,"X-Line-Access" : authToken,})
+    headers = {"X-Line-Application" : self.APP_NAME,"User-Agent" : self.APP_NAME,"X-Line-Access" : authToken,}
+    self.transport.setCustomHeaders(headers)
     self.authToken = authToken
+    self.headers = headers
     self.transport.path = self.LINE_API_QUERY_PATH_FIR
 
   def qrLogin(self,keepLoggedIn=True, systemName=None):

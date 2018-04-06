@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .Api import Poll, Talk, channel, call
 from tcr.ttypes import *
+import requests,tempfile,random,shutil,json,unicodedata
 
 def def_callback(str):
     print(str)
@@ -18,6 +19,7 @@ class LINE:
 
   def __init__(self):
     self.Talk = Talk()
+    self._session = requests.session()
 
   def login(self, mail=None, passwd=None, cert=None, token=None, qr=False, callback=None, www=False):
     if callback is None:
@@ -38,7 +40,7 @@ class LINE:
 
     self.authToken = self.Talk.authToken
     self.cert = self.Talk.cert
-
+    self.headers = self.Talk.headers
     self.Poll = Poll(self.authToken)
     self.mid = self.Talk.client.getProfile().mid
     self.channel = channel.Channel(self.authToken,self.mid)
@@ -103,7 +105,37 @@ class LINE:
   def stream(self):
         return self.Poll.stream()
 
+  """CONTENT"""
+
+  def post_content(self, url, data=None,files=None):
+        return self._session.post(url,headers=self.headers,data=data,files=files)
+
+  def get_content(self, url, headers=None):
+        return self._session.get(url,headers=self.headers,stream=True)
+
+  def downloadCOntent(self,url):
+      path = '%s/LineZX-%i.data' % (tempfile.gettempdir(),random.randint(0,9))
+
+      r = self.get_content(url)
+      if r.status_code == 200:
+          with open(path,'w') as f:
+              shutil.copyfileobj(r.raw,f)    
+          return path
+      else:
+          raise Exception('Download image failure.')
+
   """Message"""
+
+  def downloadObjMsg(self,messageId):
+    path = '%s/LineZX-%i.data' % (tempfile.gettempdir(),random.randint(0,9))
+    url = "https://obs-sg.line-apps.com/talk/m/download.nhn?oid="+messageId
+    r = self.get_content(url)
+    if r.status_code == 200:
+      with open(path,'w') as f:
+         shutil.copyfileobj(r.raw,f)
+      return path
+    else:
+      raise Exception('Download object failure.')
 
   def unsendMessage(self, messageId):
         return self.Talk.client.unsendMessage(0,messageId)
@@ -139,10 +171,11 @@ class LINE:
         return self.Talk.client.sendMessage(0, msg)
 
   def sendImage(self, to_, path):
-        M = Message(to=to_,contentType = 1)
+        M = Message(to=to_, text=None, contentType = 1)
         M.contentMetadata = None
         M.contentPreview = None
-        M_id = self._client.sendMessage(M).id
+        M2 = self.Talk.client.sendMessage(0,M)
+        M_id = M2.id
         files = {
             'file': open(path, 'rb'),
         }
@@ -156,11 +189,51 @@ class LINE:
         data = {
             'params': json.dumps(params)
         }
-        r = self._client.post_content('https://os.line.naver.jp/talk/m/upload.nhn', data=data, files=files)
+        r = self.post_content('https://obs-sg.line-apps.com/talk/m/upload.nhn', data=data, files=files)
         if r.status_code != 201:
             raise Exception('Upload image failure.')
         #r.content
         return True
+
+  def sendImageWithURL(self, to_, url):
+      path = self.downloadCOntent(url)
+      try:
+          self.sendImage(to_,path)
+      except Exception as e:
+          raise e
+
+  def sendVideo(self, to_, path):
+        M = Message(to=to_, text=None, contentType = 2)
+        M.contentMetadata = {'VIDLEN': '60000','DURATION': '60000'}
+        M.contentPreview = None
+        M2 = self.Talk.client.sendMessage(0,M)
+        M_id = M2.id
+        files = {
+            'file': open(path, 'rb'),
+        }
+        params = {
+            'name': 'media',
+            'oid': M_id,
+            'size': len(open(path, 'rb').read()),
+            'type': 'video',
+            'ver': '1.0',
+        }
+        data = {
+            'params': json.dumps(params)
+        }
+        r = self.post_content('https://obs-sg.line-apps.com/talk/m/upload.nhn', data=data, files=files)
+        if r.status_code != 201:
+            raise Exception('Upload video failure.')
+        #r.content
+        return True
+
+  def sendVideoWithURL(self, to_, url):
+      path = self.downloadCOntent(url)
+      try:
+          self.sendVideo(to_,path)
+      except Exception as e:
+          raise e
+
   def sendEvent(self, messageObject):
         return self._client.sendEvent(0, messageObject)
 
