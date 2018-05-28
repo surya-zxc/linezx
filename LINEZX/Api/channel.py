@@ -33,7 +33,7 @@ class Channel(Config):
         self.transport.path = self.LINE_CHAN_QUERY_PATH
 
     def login(self):
-        result = self.client.issueChannelToken("1341209950")
+        result = self.client.issueChannelToken(self.CHANNEL_ID['LINE_TIMELINE'])
 
         self.channel_access_token = result.channelAccessToken
         self.token = result.token
