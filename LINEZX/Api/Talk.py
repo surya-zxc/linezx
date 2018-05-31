@@ -56,7 +56,7 @@ class Talk(Config):
     Config.__init__(self)
     self.transport = THttpClient.THttpClient(self.LINE_HOST_DOMAIN,None, self.LINE_API_QUERY_PATH_FIR)
     self.transport.setCustomHeaders({
-      "X-Line-Application" : self.APP_NAME,"User-Agent" : self.APP_NAME})
+      "X-Line-Application" : self.APP_NAME,"User-Agent" : self.USER_AGENT})
     self.transport.open()
     self.protocol = TCompactProtocol.TCompactProtocol(self.transport);
     self.client = TalkService.Client(self.protocol)
@@ -66,14 +66,14 @@ class Talk(Config):
     self.cert = r[0]
     self.authToken = r[1]
     self.transport.setCustomHeaders({
-      "X-Line-Application" : self.LA,
-      "User-Agent" : self.UA,
+      "X-Line-Application" : self.APP_NAME,
+      "User-Agent" : self.USER_AGENT,
       "X-Line-Access" : r[1]
       })
     self.transport.path = self.LINE_API_QUERY_PATH_FIR
 
   def TokenLogin(self, authToken):
-    headers = {"X-Line-Application" : self.APP_NAME,"User-Agent" : self.APP_NAME,"X-Line-Access" : authToken,}
+    headers = {"X-Line-Application" : self.APP_NAME,"User-Agent" : self.USER_AGENT,"X-Line-Access" : authToken}
     self.transport.setCustomHeaders(headers)
     self.authToken = authToken
     self.headers = headers
