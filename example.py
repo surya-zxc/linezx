@@ -10,6 +10,8 @@ cl.loginResult()
 
 #cl.login(token='TOKEN MU')
 #cl.loginResult()
+#wibu lu
+
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
